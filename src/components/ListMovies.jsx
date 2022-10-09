@@ -22,39 +22,38 @@ import axios from "axios";
 function ListMovies() {
   const { store, dispatch } = useContext(movieStore);
   const { nomiStore, nomiDispatch } = useContext(nominationStore);
-  
+
   // const user = useSelector((state) => state.user);
   // const dispatch = useDispatch();
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const handleSearch = (e) => {
     setSearch(e.target.value);
-  }
-  
+  };
+
   const fetchMovies = () => {
     return axios
-      .get(`http://www.omdbapi.com/?s=${search}&apikey=43033444`)
+      .get(`https://www.omdbapi.com/?s=${search}&apikey=43033444`)
       .then((response) =>
-      dispatch({ payload: response.data.Search, type: "fetch_success" })
+        dispatch({ payload: response.data.Search, type: "fetch_success" })
       )
-      .catch(error => {
-        dispatch({error: "error", type: "fetch_error"})
-      })
+      .catch((error) => {
+        dispatch({ error: "error", type: "fetch_error" });
+      });
   };
   const nominateMovie = () => {
-    nomiDispatch({type: "ADD_MOVIE", payload: "Txwa Eshka"})
-    nomiDispatch({type: "ADD_MOVIE", payload: "Txwa Esh Maka"})
-  }
-
-  
-
+    nomiDispatch({ type: "ADD_MOVIE", payload: "Txwa Eshka" });
+  };
+  const addNomination = (id) => {
+    
+  };
+  console.log(store);
   useEffect(() => {
     fetchMovies();
     nominateMovie();
     // nominateMovie();
-    console.log(nomiStore)
+    console.log(nomiStore);
   }, [search]);
 
-  
   //   dispatch(fetchMovies());
   // }, [dispatch]);
 
@@ -62,31 +61,42 @@ function ListMovies() {
 
   return (
     <div>
-      <input type="text" value={search} onChange={ (e) => {handleSearch(e)}}/>
+      <input
+        type="text"
+        value={search}
+        onChange={(e) => {
+          handleSearch(e);
+        }}
+      />
       {/* {user.loading && <div>Loading...</div>} */}
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Year</th>
-              <th>Poster</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {store.movies && store.movies.map((element) => (
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Year</th>
+            <th>Poster</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {store.movies &&
+            store.movies.map((element) => (
               <tr key={element.imdbID}>
                 <td>{element.Title}</td>
                 <td>{element.Year}</td>
-                <td><img src={element.Poster} alt="" /></td>
                 <td>
-                  <button>Nominate</button>
+                  <img src={element.Poster} alt="" />
+                </td>
+                <td>
+                  <button onClick={addNomination(element.imdbID)}>
+                    Nominate
+                  </button>
                 </td>
               </tr>
             ))}
-            {!store.movies && <h1>{store.error}</h1>}
-          </tbody>
-        </table>
+          {!store.movies && <h1>{store.error}</h1>}
+        </tbody>
+      </table>
     </div>
   );
 }
