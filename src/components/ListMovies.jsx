@@ -13,6 +13,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { movieStore } from "../store/MovieStore";
 import { nominationStore } from "../store/NominationStore";
+import NominatedMovie from "./NominatedMovie";
 import axios from "axios";
 
 // import { useSelector, useDispatch } from "react-redux";
@@ -40,18 +41,24 @@ function ListMovies() {
         dispatch({ error: "error", type: "fetch_error" });
       });
   };
-  const nominateMovie = () => {
-    nomiDispatch({ type: "ADD_MOVIE", payload: "Txwa Eshka" });
+  const nominateMovie = (movie) => {
+    nomiDispatch({ type: "ADD_MOVIE", payload: movie });
+    console.log(nomiStore);
   };
   const addNomination = (id) => {
-    
+    const clickedMovie = store.movies.find((e) => e.imdbID === id);
+    nominateMovie(clickedMovie);
   };
-  console.log(store);
+  //eshnaka :(
+  const handleDisable = () => {
+    if (nomiStore.nominatedMovies.find((e) => e.id == e.imdbID)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
   useEffect(() => {
     fetchMovies();
-    nominateMovie();
-    // nominateMovie();
-    console.log(nomiStore);
   }, [search]);
 
   //   dispatch(fetchMovies());
@@ -69,34 +76,48 @@ function ListMovies() {
         }}
       />
       {/* {user.loading && <div>Loading...</div>} */}
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Year</th>
-            <th>Poster</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {store.movies &&
-            store.movies.map((element) => (
-              <tr key={element.imdbID}>
-                <td>{element.Title}</td>
-                <td>{element.Year}</td>
-                <td>
-                  <img src={element.Poster} alt="" />
-                </td>
-                <td>
-                  <button onClick={addNomination(element.imdbID)}>
-                    Nominate
-                  </button>
-                </td>
+      <div className="hello">
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Poster</th>
+                <th>Action</th>
               </tr>
-            ))}
-          {!store.movies && <h1>{store.error}</h1>}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {store.movies &&
+                store.movies.map((element) => (
+                  <tr key={element.imdbID}>
+                    <td>{element.Title}</td>
+                    <td>{element.Year}</td>
+                    <td>
+                      <img src={element.Poster} alt="" />
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => {
+                          addNomination(element.imdbID);
+                        }}
+                        // disabled={handleDisable()}
+                        // disabled={nomiStore.nominatedMovies.find(
+                        //   (e) => (e.id == element.imdbID
+                        // )}
+                        // ={nomiStore.find((e) => (e.id = imdbID))}
+                      >
+                        Nominate
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              {!store.movies && <h1>{store.error}</h1>}
+            </tbody>
+          </table>
+        </div>
+        <NominatedMovie />
+      </div>
     </div>
   );
 }
