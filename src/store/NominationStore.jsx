@@ -7,7 +7,7 @@
 import { createContext, useReducer } from "react";
 
 const INITIAL_STATE = {
-  nominatedMovies: {}
+  nominatedMovies: [],
 
   // user: {
   //   name: "Ali",
@@ -16,28 +16,29 @@ const INITIAL_STATE = {
   // }
 };
 
-
 export const ACTIONS = {
   ADD_MOVIE: "ADD_MOVIE",
-  DELETE_MOVIE: "DELETE_MOVIE"
+  DELETE_MOVIE: "DELETE_MOVIE",
 };
 
 export const nominationStore = createContext({
-  ...INITIAL_STATE
+  ...INITIAL_STATE,
 });
 
 const nominationReducer = (state, action) => {
   switch (action.type) {
-    case (ACTIONS.ADD_MOVIE):
+    case ACTIONS.ADD_MOVIE:
       return {
-        ...state, nominatedMovies: {...state.nominatedMovies, hello: action.payload}
+        ...state,
+        nominatedMovies: [...state.nominatedMovies, action.payload],
+        // nominatedMovies: { ...state.nominatedMovies, hello: action.payload },
         // state.nominatedMovies.add(action.payload)
       };
-      case (ACTIONS.DELETE_MOVIE):
+    case ACTIONS.DELETE_MOVIE:
       return {
         loading: false,
-        nominatedMovies: {}, 
-        error: action.error
+        nominatedMovies: {},
+        error: action.error,
       };
     default: {
       return state;
@@ -51,13 +52,16 @@ const nominationReducer = (state, action) => {
 // });
 
 const NominationProvider = ({ children }) => {
-  const [nomiStore, nomiDispatch] = useReducer(nominationReducer, INITIAL_STATE);
+  const [nomiStore, nomiDispatch] = useReducer(
+    nominationReducer,
+    INITIAL_STATE
+  );
 
   return (
     <nominationStore.Provider
       value={{
         nomiStore,
-        nomiDispatch
+        nomiDispatch,
       }}
     >
       {children}
