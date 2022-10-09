@@ -1,10 +1,14 @@
+import ListMovies from "./components/ListMovies";
+import NominationProvider from "./store/NominationStore";
 import "./styles.css";
 
 export default function App() {
   return (
+    <NominationProvider >
     <div className="App">
-      <h1>Hello CodeSandbox</h1>
-      <h2>Start editing to see some magic happen!</h2>
+      <h1>Yeah</h1>
+      <ListMovies />
     </div>
+    </NominationProvider>
   );
 }
