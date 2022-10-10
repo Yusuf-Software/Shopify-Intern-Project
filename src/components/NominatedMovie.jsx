@@ -10,7 +10,6 @@ const NominatedMovie = () => {
   //     nominateMovie(clickedMovie);
   //   };
   const handleDelete = (el) => {
-    console.log(el);
     nomiDispatch({ type: "DELETE_MOVIE", payload: el });
   };
   return (
