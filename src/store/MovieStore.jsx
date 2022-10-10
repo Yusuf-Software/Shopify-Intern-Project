@@ -8,8 +8,8 @@ import { createContext, useReducer } from "react";
 
 const INITIAL_STATE = {
   loading: true,
-  error: '',
-  movies: []
+  error: "",
+  movies: [],
   // user: {
   //   name: "Ali",
   //   email: "Email@email.com",
@@ -19,11 +19,11 @@ const INITIAL_STATE = {
 
 export const ACTION = {
   ADD_VALUE: "ADD_VALUE",
-  DELETE_VALUE: "DELETE_VALUE"
+  DELETE_VALUE: "DELETE_VALUE",
 };
 
 export const movieStore = createContext({
-  ...INITIAL_STATE
+  ...INITIAL_STATE,
 });
 
 const movieReducer = (state, action) => {
@@ -32,15 +32,15 @@ const movieReducer = (state, action) => {
       return {
         loading: false,
         movies: action.payload,
-        error: ''
+        error: "",
         // ...state,
         // movies: action.payload
       };
-      case "fetch_error":
+    case "fetch_error":
       return {
         loading: false,
-        movies: [], 
-        error: action.error
+        movies: [],
+        error: action.error,
       };
     default: {
       return state;
@@ -60,7 +60,7 @@ const MovieProvider = ({ children }) => {
     <movieStore.Provider
       value={{
         store,
-        dispatch
+        dispatch,
       }}
     >
       {children}

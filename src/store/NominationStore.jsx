@@ -35,7 +35,6 @@ const nominationReducer = (state, action) => {
         // state.nominatedMovies.add(action.payload)
       };
     case ACTIONS.DELETE_MOVIE:
-      // console.log(Array.from(new Set([...state.nominatedMovies])));
       return {
         ...state,
         nominatedMovies: [...state.nominatedMovies].filter(

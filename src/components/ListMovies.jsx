@@ -43,7 +43,6 @@ function ListMovies() {
   };
   const nominateMovie = (movie) => {
     nomiDispatch({ type: "ADD_MOVIE", payload: movie });
-    console.log(nomiStore);
   };
   const addNomination = (e) => {
     nominateMovie(e);
@@ -63,8 +62,6 @@ function ListMovies() {
   //   dispatch(fetchMovies());
   // }, [dispatch]);
 
-  // console.log(state);
-  console.log(nomiStore);
   return (
     <div>
       <input
