@@ -9,7 +9,10 @@ const NominatedMovie = () => {
   //     const clickedMovie = store.movies.find((e) => e.imdbID === id);
   //     nominateMovie(clickedMovie);
   //   };
-
+  const handleDelete = (el) => {
+    console.log(el);
+    nomiDispatch({ type: "DELETE_MOVIE", payload: el });
+  };
   return (
     <div>
       {/* {user.loading && <div>Loading...</div>} */}
@@ -32,7 +35,7 @@ const NominatedMovie = () => {
                   <img src={element.Poster} alt="" />
                 </td>
                 <td>
-                  <button>Delete</button>
+                  <button onClick={() => handleDelete(element)}>Delete</button>
                   {/* <button
                     onClick={() => {
                       addNomination(element.imdbID);
