@@ -45,9 +45,8 @@ function ListMovies() {
     nomiDispatch({ type: "ADD_MOVIE", payload: movie });
     console.log(nomiStore);
   };
-  const addNomination = (id) => {
-    const clickedMovie = store.movies.find((e) => e.imdbID === id);
-    nominateMovie(clickedMovie);
+  const addNomination = (e) => {
+    nominateMovie(e);
   };
   //eshnaka :(
   const handleDisable = () => {
@@ -65,7 +64,7 @@ function ListMovies() {
   // }, [dispatch]);
 
   // console.log(state);
-
+  console.log(nomiStore);
   return (
     <div>
       <input
@@ -98,8 +97,12 @@ function ListMovies() {
                     </td>
                     <td>
                       <button
+                        disabled={
+                          nomiStore.nominatedMovies.includes(element) ||
+                          nomiStore.nominatedMovies.length == 5
+                        }
                         onClick={() => {
-                          addNomination(element.imdbID);
+                          addNomination(element);
                         }}
                         // disabled={handleDisable()}
                         // disabled={nomiStore.nominatedMovies.find(
