@@ -10,7 +10,7 @@ export default function App() {
       <div className="App">
         <ListMovies />
         {/* <NominatedMovie /> */}
-        <Fetch />
+        {/* <Fetch /> */}
       </div>
     </NominationProvider>
   );

@@ -15,6 +15,7 @@ import { movieStore } from "../store/MovieStore";
 import { nominationStore } from "../store/NominationStore";
 import NominatedMovie from "./NominatedMovie";
 import axios from "axios";
+import useFetch from "../hooks/useFetch";
 
 // import { useSelector, useDispatch } from "react-redux";
 // import { fetchMovies } from "./userSlice";
@@ -31,29 +32,31 @@ function ListMovies() {
     setSearch(e.target.value);
   };
 
+  const { loading, error, data } = useFetch(
+    `https://www.omdbapi.com/?s=${search}&apikey=43033444`
+  );
+  
   const fetchMovies = () => {
-    return axios
-      .get(`https://www.omdbapi.com/?s=${search}&apikey=43033444`)
-      .then((response) =>
-        dispatch({ payload: response.data.Search, type: "fetch_success" })
-      )
-      .catch((error) => {
-        dispatch({ error: "error", type: "fetch_error" });
-      });
+    if (loading){
+      console.log("Hello, it is still loading")
+    }
+    else{
+    if (!error && data && data.Response){
+      dispatch({ payload: data.Search, type: "fetch_success" })
+      // console.log(data.Response)
+      // console.log(data.Search)
+      
+    }
+    else if(!error){
+      dispatch({ error: error, type: "fetch_error" });
+    }
+  }
   };
   const nominateMovie = (movie) => {
     nomiDispatch({ type: "ADD_MOVIE", payload: movie });
   };
   const addNomination = (e) => {
     nominateMovie(e);
-  };
-  //eshnaka :(
-  const handleDisable = () => {
-    if (nomiStore.nominatedMovies.find((e) => e.id == e.imdbID)) {
-      return true;
-    } else {
-      return false;
-    }
   };
   useEffect(() => {
     fetchMovies();
@@ -95,17 +98,13 @@ function ListMovies() {
                     <td>
                       <button
                         disabled={
-                          nomiStore.nominatedMovies.includes(element) ||
-                          nomiStore.nominatedMovies.length == 5
+                          nomiStore.nominatedMovies.find((e) => {
+                            if (element.imdbID == e.imdbID) return true;
+                          }) || nomiStore.nominatedMovies.length == 5
                         }
                         onClick={() => {
                           addNomination(element);
                         }}
-                        // disabled={handleDisable()}
-                        // disabled={nomiStore.nominatedMovies.find(
-                        //   (e) => (e.id == element.imdbID
-                        // )}
-                        // ={nomiStore.find((e) => (e.id = imdbID))}
                       >
                         Nominate
                       </button>
