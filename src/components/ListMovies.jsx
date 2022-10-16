@@ -35,22 +35,19 @@ function ListMovies() {
   const { loading, error, data } = useFetch(
     `https://www.omdbapi.com/?s=${search}&apikey=43033444`
   );
-  
+
   const fetchMovies = () => {
-    if (loading){
-      console.log("Hello, it is still loading")
+    if (loading) {
+      console.log("Hello, it is still loading");
+    } else {
+      if (!error && data && data.Response) {
+        dispatch({ payload: data.Search, type: "fetch_success" });
+        // console.log(data.Response)
+        // console.log(data.Search)
+      } else if (!error) {
+        dispatch({ error: error, type: "fetch_error" });
+      }
     }
-    else{
-    if (!error && data && data.Response){
-      dispatch({ payload: data.Search, type: "fetch_success" })
-      // console.log(data.Response)
-      // console.log(data.Search)
-      
-    }
-    else if(!error){
-      dispatch({ error: error, type: "fetch_error" });
-    }
-  }
   };
   const nominateMovie = (movie) => {
     nomiDispatch({ type: "ADD_MOVIE", payload: movie });
@@ -98,9 +95,9 @@ function ListMovies() {
                     <td>
                       <button
                         disabled={
-                          nomiStore.nominatedMovies.find((e) => {
-                            if (element.imdbID == e.imdbID) return true;
-                          }) || nomiStore.nominatedMovies.length == 5
+                          nomiStore.nominatedMovies.find(
+                            (e) => element.imdbID == e.imdbID
+                          ) || nomiStore.nominatedMovies.length == 5
                         }
                         onClick={() => {
                           addNomination(element);
